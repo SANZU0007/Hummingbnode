@@ -14,8 +14,10 @@ import Task from './models/task.js';
 import Mood from './models/mood.js';
 import CheckInOutTime from './models/checkInOut.js';
 import employeeRoutes from "./routes/employees.js"
-
+import attendanceRoutes from './routes/attendanceRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import { createSurvey, getSurveys } from './controllers/surveyController.js';
+import answerRoutes from './routes/answerRoutes.js';
 
 const app = express();
 
@@ -78,6 +80,9 @@ app.use('/tasks', taskRoutes);
 app.use('/api', employeeRoutes);
 
 
+app.use('/api/attendance', attendanceRoutes);
+
+
 // app.post('/tasks/createTask', async (req, res) => {
 //     try{
 //             const taskData = req.body
@@ -138,6 +143,9 @@ app.use('/api', employeeRoutes);
 
 
 
+app.post('/api/surveys', createSurvey);
+app.get('/api/surveys/:id?', getSurveys); // Updated route definition to handle optional ID
+app.use('/api', answerRoutes);
 
 
 
