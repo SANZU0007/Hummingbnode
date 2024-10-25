@@ -19,6 +19,12 @@ import taskRoutes from './routes/taskRoutes.js';
 import { createSurvey, getSurveys } from './controllers/surveyController.js';
 import answerRoutes from './routes/answerRoutes.js';
 
+import feedbackRoutes from './routes/feedbackRoutes.js';
+
+
+import messageRoutes from './routes/messageRoutes.js';
+
+
 const app = express();
 
 mongoose.connect("mongodb+srv://sanjay:sanjay2023@cluster0.tjzm3y1.mongodb.net/HummingBData?retryWrites=true&w=majority&appName=Cluster0", {
@@ -70,6 +76,28 @@ passport.deserializeUser(User.deserializeUser());
 app.get('/', (req, res) => {
     res.json({boy:'heyyyyy', girl:'shut up'});
 });
+
+
+
+
+
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) return next(err);
+        if (!user) return res.status(400).json({ message: 'Invalid username or password', type: 'error' });
+        req.logIn(user, (err) => {
+            if (err) return next(err);
+            return res.json({ data: user, message: 'Logged in successfully', type: 'success' });
+        });
+    })(req, res, next);
+});
+
+
+
+
+
+
+
 
 
 
@@ -149,6 +177,11 @@ app.use('/api', answerRoutes);
 
 
 
+app.use('/api', messageRoutes);
+
+app.use('/api', feedbackRoutes);
+
+
 
 
 
@@ -222,16 +255,6 @@ app.post('/scores', async (req, res) => {
     }
 });
 
-app.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(400).json({ message: 'Invalid username or password', type: 'error' });
-        req.logIn(user, (err) => {
-            if (err) return next(err);
-            return res.json({ data: user, message: 'Logged in successfully', type: 'success' });
-        });
-    })(req, res, next);
-});
 
 app.post('/logout', async (req, res) => {
     req.logout((err) => {
