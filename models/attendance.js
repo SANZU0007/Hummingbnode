@@ -17,6 +17,10 @@ const attendanceSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    userMood: {
+        type: Number,
+        default: null,
+    },
     isCheckedOut: {
         type: Boolean,
         default: false,

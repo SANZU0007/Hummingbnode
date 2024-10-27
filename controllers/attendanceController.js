@@ -226,3 +226,50 @@ cron.schedule('0 0 * * *', async () => {
         console.error('Error resetting attendance status:', error);
     }
 });
+
+
+// Update user mood
+export const updateMood = async (req, res) => {
+    const { employeeId, mood } = req.body;
+
+    try {
+        const { start, end } = getStartAndEndOfDay();
+
+        // Find today's check-in record for the employee
+        const attendance = await Attendance.findOne({
+            employeeId,
+            checkIn: { $gte: start, $lte: end }
+        });
+
+        if (!attendance) {
+            return res.status(404).send({ message: 'No check-in record found for today. Cannot update mood.' });
+        }
+
+        // Update the user mood
+        attendance.userMood = mood;
+        await attendance.save();
+
+        res.status(200).send({ message: 'User mood updated successfully!', attendance });
+    } catch (error) {
+        res.status(500).send({ message: 'Error updating user mood', error });
+    }
+};
+
+
+
+export const SingleUserAllCheckIns = async (req, res) => {
+    const { employeeId } = req.params;
+    try {
+        const userCheckIns = await Attendance.find({
+            employeeId
+        });
+
+        if (!userCheckIns || userCheckIns.length === 0) {
+            return res.status(404).send({ message: 'No check-in records found for this user.' });
+        }
+
+        res.status(200).send(userCheckIns);
+    } catch (error) {
+        res.status(500).send({ message: 'Error fetching user check-in records', error });
+    }
+};

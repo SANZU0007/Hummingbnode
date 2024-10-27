@@ -1,5 +1,7 @@
+// /models/user.js
+
 import mongoose from 'mongoose';
-import passportLocalMongoose from 'passport-local-mongoose';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -11,6 +13,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    password: {
+        type: String,
+        required: true,
+    },
     role: {
         type: String,
         enum: ['Employee', 'HR'],
@@ -21,25 +27,16 @@ const userSchema = new mongoose.Schema({
         enum: ['Development', 'Design', 'Management', 'Team'],
         required: true,
     },
-    scores: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Scores',
-    },
-    tasks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task',
-    }],
-    mood: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mood',
-    }],
-    checkInOutHistory: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'CheckInOutTime',
-    }]
 });
 
-userSchema.plugin(passportLocalMongoose);
+// Hash password before saving the user document
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    }
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
 

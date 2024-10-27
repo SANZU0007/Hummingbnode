@@ -24,10 +24,12 @@ import feedbackRoutes from './routes/feedbackRoutes.js';
 
 import messageRoutes from './routes/messageRoutes.js';
 
+import userRoutes from './routes/userRoutes.js';
+
 
 const app = express();
 
-mongoose.connect("mongodb+srv://sanjay:sanjay2023@cluster0.tjzm3y1.mongodb.net/HummingBData?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect("mongodb+srv://sanjay:sanjay2023@cluster0.tjzm3y1.mongodb.net/HummingBDataService?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -66,38 +68,16 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
     res.json({boy:'heyyyyy', girl:'shut up'});
 });
-
-
-
-
-
-app.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(400).json({ message: 'Invalid username or password', type: 'error' });
-        req.logIn(user, (err) => {
-            if (err) return next(err);
-            return res.json({ data: user, message: 'Logged in successfully', type: 'success' });
-        });
-    })(req, res, next);
-});
-
-
-
-
-
-
-
 
 
 
@@ -176,6 +156,8 @@ app.get('/api/surveys/:id?', getSurveys); // Updated route definition to handle 
 app.use('/api', answerRoutes);
 
 
+app.use('/api/users', userRoutes);
+
 
 app.use('/api', messageRoutes);
 
@@ -187,98 +169,6 @@ app.use('/api', feedbackRoutes);
 
 
 
-app.post('/register', async (req, res) => {
-    try {
-        const { name, username, scores, email, password, role, team } = req.body;
-        const user = new User({ name, username, scores, email, role, team });
-        const registeredUser = await User.register(user, password);
-        console.log("User registered: ", registeredUser);
-        return res.json({ data: registeredUser, message: "Registration Successful", type: "success" });
-    } catch (err) {
-        console.error('Registration error:', err);
-        return res.status(500).json({ data: null, message: err.message, type: 'error' });
-    }
-});
-
-app.get('/avgscores', async (req, res) => {
-    try {
-
-        const scores = await Scores.find().populate('user');
-
-        return res.json({ data: scores, message: 'Scores fetched successfully', type: 'success' });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ data: null, message: err.message, type: 'error' });
-    }
-})
-
-app.get('/scores/:userId', async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const user = await User.findById(userId).populate('scores');
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        const scores = await Scores.find({ user: userId });
-
-        return res.json({ data: scores, message: 'Scores fetched successfully', type: 'success' });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ data: null, message: err.message, type: 'error' });
-    }
-}); 
-
-app.post('/scores', async (req, res) => {
-    try {
-        const { date, author, data } = req.body;
-        const user = await User.findById(author);
-        if (!user) {
-            return res.status(404).json({ data: null, message: 'User not found', type: 'error' });
-        }
-        const transformedData = Object.keys(data).map(parameter => ({
-            parameter,
-            value: data[parameter]
-        }));
-        const scores = new Scores({
-            date: date,
-            user: author,
-            data: transformedData
-        });
-        await scores.save();
-        user.scores = scores._id;
-        await user.save();
-        return res.json({ data: req.body, message: "Scores created successfully", type: "success" });
-    } catch (err) {
-        console.error(err); // Log the error for debugging
-        return res.status(500).json({ data: null, message: err.message, type: "error" });
-    }
-});
-
-
-app.post('/logout', async (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Failed to log out', type: 'error' });
-        }
-        req.session.destroy((err) => {
-            if (err) {
-                return res.status(500).json({ message: 'Failed to destroy session', type: 'error' });
-            }
-            res.clearCookie('session');
-            return res.json({ message: 'Logged out successfully', type: 'success' });
-        });
-    });
-
-});
-
-app.get('/random', (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.json({ authenticated: "abhishek", user: "dhiman"});
-    } else {
-        return res.json({ authenticated: false });
-    }
-});
 
 
 

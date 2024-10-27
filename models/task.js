@@ -30,9 +30,9 @@ const taskSchema = new mongoose.Schema({
     default: 0, // Start duration set to 0 minutes
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: String,
+    required: true,
+    trim: true
   },
   role: {
     type: String,
