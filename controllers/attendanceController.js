@@ -1,5 +1,4 @@
 import Attendance from '../models/Attendance.js';
-
 import cron from 'node-cron';
 
 // Helper function to get start and end of the day
