@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     email: {
         type: String,
@@ -19,13 +20,16 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['Employee', 'HR' ,"TL"],
+        enum: ['Employee', 'HR' ,"TL" , 'Administrator'],
         required: true,
     },
     team: {
         type: String,
         enum: ['Development', 'Design', 'Management', 'Team'],
         required: true,
+    },
+    image: {
+        type: String,
     },
 });
 
