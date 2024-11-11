@@ -79,27 +79,36 @@ export const registerUser = async (req, res) => {
 
 
 
-
-// Login User (new function)
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Check if user exists
         const user = await User.findOne({ email });
-
         if (!user) {
+            console.log("User not found with email:", email);
             return res.status(400).json({ message: 'Invalid email or password', type: 'error' });
         }
 
+        // Check if the password matches
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid email or password', type: 'error' });
+            console.log("Password mismatch for user:", email);
+            return res.status(400).json({ message: 'Invalid password', type: 'error' });
         }
 
-        // Generate JWT Token
-        const token = jwt.sign({ id: user._id, email: user.email }, '12345678989898', { expiresIn: '1h' });
+        // Ensure JWT secret is available in the environment variables
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            console.error("JWT secret is not configured properly");
+            return res.status(500).json({ message: 'Internal server error: JWT secret not configured', type: 'error' });
+        }
 
+        // Generate JWT Token using a secret from environment variables
+        const token = jwt.sign({ id: user._id, email: user.email }, jwtSecret, { expiresIn: '1h' });
+        console.log("Generated JWT token for user:", email);
+
+        // Send response with token and user details
         res.json({ 
             message: 'Logged in successfully',
             type: 'success',
@@ -110,10 +119,11 @@ export const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 team: user.team,
-                image:user.image
+                image: user.image
             }
         });
     } catch (error) {
+        console.error("Login Error:", error);
         res.status(500).json({ message: 'Internal server error', type: 'error' });
     }
 };
