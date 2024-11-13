@@ -21,7 +21,10 @@ const messageSchema = new mongoose.Schema({
   receivingUserName: {
     type: String,
     required: true
-  }
+  },
+  companyName: {
+    type: String,
+},
 });
 
 const Message = mongoose.model('Message', messageSchema);

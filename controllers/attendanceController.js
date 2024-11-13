@@ -18,7 +18,7 @@ const OFFICE_END_TIME = 17; // 5 PM
 
 // Handle check-in
 export const checkIn = async (req, res) => {
-    const { employeeId } = req.body;
+    const { employeeId , companyName } = req.body;
     try {
         const { start, end } = getStartAndEndOfDay();
 
@@ -43,6 +43,7 @@ export const checkIn = async (req, res) => {
             checkIn: currentTime,
             isCheckedIn: true,
             isCheckedOut: false,
+            companyName ,
             lateArrival
         });
 
@@ -229,7 +230,7 @@ cron.schedule('0 0 * * *', async () => {
 
 // Update user mood
 export const updateMood = async (req, res) => {
-    const { employeeId, mood } = req.body;
+    const { employeeId, mood  } = req.body;
 
     try {
         const { start, end } = getStartAndEndOfDay();
@@ -253,6 +254,7 @@ export const updateMood = async (req, res) => {
         res.status(500).send({ message: 'Error updating user mood', error });
     }
 };
+
 
 
 

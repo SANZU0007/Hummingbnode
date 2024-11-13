@@ -33,6 +33,9 @@ const attendanceSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    companyName: {
+        type: String,
+    },
       
 });
 

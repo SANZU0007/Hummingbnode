@@ -36,6 +36,9 @@ const AnswerSchema = new mongoose.Schema({
         required: true,
     },
     questions: [AnsSchema1], // Array of question objects
+    companyName: {
+        type: String,
+    },
 });
 
 // Export the Survey model

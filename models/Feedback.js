@@ -12,7 +12,10 @@ const feedbackSchema = new mongoose.Schema({
   messageStatus: {
     type: Boolean, // Use 'Boolean' with an uppercase 'B'
     default: false // Optional: You can set a default value
-  }
+  },
+  companyName: {
+    type: String,
+},
 });
 
 // Correct the model name to match the schema

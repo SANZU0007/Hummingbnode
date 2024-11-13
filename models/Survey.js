@@ -16,6 +16,9 @@ const questionSchema = new mongoose.Schema({
         enum: ['checkbox', 'feedback', 'Boolean'],
         default: 'checkbox', // Set 'checkbox' as the default value
     },
+    companyName: {
+        type: String,
+    },
 });
 
 const surveySchema = new mongoose.Schema({

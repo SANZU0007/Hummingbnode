@@ -42,7 +42,9 @@ const taskSchema = new mongoose.Schema({
   team: {
     type: String,
   },
-  
+  companyName: {
+    type: String,
+},
 });
 
 const Task = mongoose.model('Task', taskSchema);

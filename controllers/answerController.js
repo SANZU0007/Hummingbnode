@@ -4,7 +4,7 @@ import Answers from '../models/Answer.js'; // Import the Answers model
 
 // Controller to create a new answer (response to a survey)
 export const createAnswer = async (req, res) => {
-    const { Title, userId, surveyId, username, questions  } = req.body;
+    const { Title, userId, surveyId, username, questions ,companyName } = req.body;
 
     try {
         // Ensure that each question answer has a valid format
@@ -12,6 +12,7 @@ export const createAnswer = async (req, res) => {
             questionId: question.questionId,
             text: question.text,
             answer: question.answer, // Ensure the answer is within 0 to 10
+           
         }));
 
         // Create a new Answer instance
@@ -21,6 +22,7 @@ export const createAnswer = async (req, res) => {
             userId,
             surveyId,
             username,
+            companyName ,
             questions: formattedQuestions,
         });
 

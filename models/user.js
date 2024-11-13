@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    companyName: {
+        type: String,
+    },
 });
 
 // // Hash password before saving the user document
