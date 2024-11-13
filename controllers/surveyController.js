@@ -3,7 +3,7 @@ import Survey from '../models/Survey.js'; // Import your Survey model
 
 // Controller to create a new survey
 export const createSurvey = async (req, res) => {
-    const { title, questions } = req.body;
+    const { title, questions , companyName } = req.body;
 
     try {
         // Ensure that each question gets a unique incrementing questionId starting from 1
@@ -18,6 +18,7 @@ export const createSurvey = async (req, res) => {
         const newSurvey = new Survey({
             _id: new mongoose.Types.ObjectId(), // Explicitly set a new ObjectId for the survey
             title,
+            companyName,
             questions: formattedQuestions,
         });
 
