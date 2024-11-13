@@ -9,11 +9,9 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import User from './models/user.js';
-import Scores from './models/scores.js';
-import Task from './models/task.js';
-import Mood from './models/mood.js';
-import CheckInOutTime from './models/checkInOut.js';
+
+
+
 import employeeRoutes from "./routes/employees.js"
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
@@ -173,22 +171,6 @@ app.use('/api', feedbackRoutes);
 
 
 
-app.get('/tasks/:index', async (req, res) => {
-    try { 
-        const { index } = req.params;
-        
-        // Fetch tasks where the user._id matches the provided index
-        const tasks = await Task.find({ user: index }).populate('user');
-        
-        if (!tasks) {
-            return res.status(404).json({ data: null, message: 'Tasks not found', type: 'error' });
-        }
-        
-        return res.json(tasks);
-    } catch (err) {
-        return res.status(500).json({ data: null, message: err.message, type: 'error' });
-    }
-});
 
 
 
@@ -198,159 +180,15 @@ app.get('/tasks/:index', async (req, res) => {
 
 
 
-app.get('/getMood', async (req, res) => {
-    try {
-        const moods = await Mood.find().populate('user');
-
-        return res.json({ data: moods, message: "Moods fetched successfully", type: "success" });
-    } catch (err) {
-        return res.json({ data: null, message: err.message, type: "error" });
-    }
-});
-
-
-app.post('/mood', async (req, res) => {
-    try {
-        const moodData = req.body;
-
-        const currentDate = new Date();
-        const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-
-        let mood = await Mood.findOne({
-            user: moodData.author,
-            date: { $gte: startOfDay, $lt: new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000) } // from start of day to end of day
-        });
-
-        const user = await User.findById(moodData.author);
-
-        if (!user) {
-            return res.json({ data: null, message: "User not found", type: "error" });
-        }
-
-        if (mood) {
-            mood.data = moodData.mood;
-        } else {
-            mood = new Mood({
-                data: moodData.mood,
-                date: startOfDay,  
-                user: moodData.author
-            });
-            user.mood.push(mood);
-        }
-        await mood.save();
-        await user.save();
-
-        return res.json({ data: mood, message: "Performance updated successfully", type: "success" });
-    } catch (err) {
-        return res.json({ data: null, message: err.message, type: "error" });
-    }
-});
 
 
 
-app.get('/getCheckInOut/:userId', async (req, res) => {
-    try {
-      const userId = req.params.userId; 
+
+
+
+
+
   
-      const today = new Date();
-      const todayDateOnly = new Date(today.setHours(0, 0, 0, 0));
-  
-      const user = await User.findById(userId).populate('checkInOutHistory');
-  
-      const checkInOutData = user.checkInOutHistory.find((record) => {
-        const checkInDateOnly = new Date(record.checkIn).setHours(0, 0, 0, 0);
-        return checkInDateOnly === todayDateOnly.getTime(); 
-      });
-  
-      if (!checkInOutData) {
-        return res.status(200).json({data:{
-          checkIn: "",
-          checkOut: "",
-          user: userId
-        }, message:"Got check-in-out successfully", type:"success"});
-      }
-  
-      return res.status(200).json({data:checkInOutData, message:"Got check-in-out successfully", type: "success"});
-    } catch (error) {
-      console.error('Error fetching check-in/out data:', error);
-      return res.status(500).json({
-        message: "Internal Server Error",
-        type: "error",
-        error: error.message
-      });
-    }
-  });
-  
-
-app.post('/setCheckInOut', async (req, res) => {
-    try {
-      const { user, checkIn, checkOut } = req.body;
-      const userFetched = await User.findById(user);
-      console.log(req.body)
- 
-      if (!userFetched) {
-        return res.status(404).json({ message: "User not found", type: "error" });
-      }
-  
-      const checkInDate = new Date(checkIn).setHours(0, 0, 0, 0);
-  
-      let existingRecord = await CheckInOutTime.findOne({
-        user: user,
-        checkIn: {
-          $gte: new Date(checkInDate),
-          $lt: new Date(checkInDate + 24 * 60 * 60 * 1000) 
-        }
-      });
-  
-      if (existingRecord) {
-        existingRecord.checkIn = checkIn; 
-        existingRecord.checkOut = checkOut; 
-        await existingRecord.save();
-  
-        return res.json({
-          data: existingRecord,
-          message: "Check-in/out time updated successfully.",
-          type: "success"
-        });
-      }
-  
-      const checkInOutRecord = new CheckInOutTime({
-        checkIn,
-        checkOut,
-        user: user
-      });
-  
-      await checkInOutRecord.save();
-  
-      userFetched.checkInOutHistory.push(checkInOutRecord._id);
-      await userFetched.save();
-  
-      return res.json({
-        data: checkInOutRecord,
-        message: "Successfully Checked-In/Out",
-        type: "success"
-      });
-    } catch (error) {
-      console.error('Error setting check-in/out time:', error);
-      return res.status(500).json({
-        message: "Internal Server Error",
-        type: "error",
-        error: error.message
-      });
-    }
-  });
-  
-
-  app.get('/getUserData', async (req, res) => {
-    try {
-      const users = await User.find().populate('checkInOutHistory').exec();
-  
-      res.status(200).json({data:users, type:"success"});
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
 
 
 app.listen(4000, () => {

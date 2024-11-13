@@ -2,8 +2,6 @@ import Feedback from '../models/Feedback.js';
 
 
 
-
-
 export const getAllFeedback = async (req, res) => {
     try {
       const feedbackList = await Feedback.find();
@@ -30,8 +28,8 @@ export const createFeedback = async (req, res) => {
       }
   
       // Proceed to create new feedback if all feedback records are true
-      const { personid, message, messageStatus } = req.body;
-      const newFeedback = new Feedback({ personid, message, messageStatus });
+      const { personid, message, messageStatus ,companyName } = req.body;
+      const newFeedback = new Feedback({ personid, message, messageStatus,companyName });
       await newFeedback.save();
       res.status(201).json(newFeedback);
     } catch (error) {
