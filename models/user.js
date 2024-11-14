@@ -28,9 +28,7 @@ const userSchema = new mongoose.Schema({
         enum: ['Development', 'Design', 'Management', 'Team'],
         required: true,
     },
-    image: {
-        type: String,
-    },
+   
     companyName: {
         type: String,
     },

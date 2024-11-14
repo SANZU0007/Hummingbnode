@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables from .env file
 
 export const registerUser = async (req, res) => {
-    const { name, email, password, role, team, image ,companyName } = req.body;
+    const { name, email, password, role, team,companyName } = req.body;
 
     try {
         const existingUser = await User.findOne({ email });
@@ -51,7 +51,7 @@ export const registerUser = async (req, res) => {
         }
 
         // Email sent successfully, proceed to register the user
-        const newUser = new User({ name, email, password: hashedPassword, role, team, image  ,companyName });
+        const newUser = new User({ name, email, password: hashedPassword, role, team, companyName });
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully. A confirmation email has been sent.', type: 'success' });
         
@@ -119,7 +119,7 @@ export const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 team: user.team,
-                image: user.image,
+              
                 companyName: user.companyName
             }
         });
