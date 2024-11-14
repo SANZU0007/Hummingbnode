@@ -16,7 +16,11 @@ const router = express.Router();
 
 router.post('/checkin', checkIn);
 router.post('/checkout', checkOut);
-router.get('/today-checkins', getTodayCheckIns);
+
+
+router.get('/today-checkins/:companyName?', getTodayCheckIns);
+
+
 router.get('/all-checkins', getAllCheckIns);
 
 

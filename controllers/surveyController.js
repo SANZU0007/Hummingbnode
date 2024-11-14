@@ -32,8 +32,26 @@ export const createSurvey = async (req, res) => {
 };
 
 // Controller to get all surveys or a specific survey by ID
+export const getSurveYCompany = async (req, res) => {
+    const { companyName  } = req.params; // Retrieve survey ID from the URL if provided
+
+    try {
+          
+       
+            // Fetch all surveys
+       const   surveys = await Survey.find({companyName:companyName});
+        
+
+        res.status(200).json(surveys);
+    } catch (error) {
+        // Handle any errors during the fetch process
+        res.status(500).json({ message: "Failed to fetch surveys", error: error.message });
+    }
+};
+
+
 export const getSurveys = async (req, res) => {
-    const { id } = req.params; // Retrieve survey ID from the URL if provided
+    const { id  } = req.params; // Retrieve survey ID from the URL if provided
 
     try {
         let surveys;
@@ -45,7 +63,7 @@ export const getSurveys = async (req, res) => {
             }
         } else {
             // Fetch all surveys
-            surveys = await Survey.find();
+            surveys = await Survey.find({companyName:"Humming Bee"});
         }
 
         res.status(200).json(surveys);

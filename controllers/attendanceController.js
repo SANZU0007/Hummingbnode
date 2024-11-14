@@ -94,11 +94,14 @@ export const checkOut = async (req, res) => {
 
 // Get today's check-ins for all employees
 export const getTodayCheckIns = async (req, res) => {
+
+      const { companyName } = req.params;
     try {
         const { start, end } = getStartAndEndOfDay();
 
         const todayCheckIns = await Attendance.find({
-            checkIn: { $gte: start, $lte: end }
+            checkIn: { $gte: start, $lte: end },
+            companyName: companyName
         });
 
         res.status(200).send(todayCheckIns);

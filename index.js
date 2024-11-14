@@ -15,7 +15,7 @@ import cors from 'cors';
 import employeeRoutes from "./routes/employees.js"
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
-import { createSurvey, getSurveys } from './controllers/surveyController.js';
+import { createSurvey, getSurveYCompany, getSurveys } from './controllers/surveyController.js';
 import answerRoutes from './routes/answerRoutes.js';
 
 import feedbackRoutes from './routes/feedbackRoutes.js';
@@ -151,7 +151,14 @@ app.use('/api/attendance', attendanceRoutes);
 
 
 app.post('/api/surveys', createSurvey);
+
 app.get('/api/surveys/:id?', getSurveys); // Updated route definition to handle optional ID
+
+
+app.get('/api/company/:companyName?', getSurveYCompany ); // Updated route definition to handle optional ID
+
+
+
 app.use('/api', answerRoutes);
 
 
