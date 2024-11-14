@@ -37,7 +37,6 @@ export const getSurveYCompany = async (req, res) => {
 
     try {
           
-       
             // Fetch all surveys
        const   surveys = await Survey.find({companyName:companyName});
         

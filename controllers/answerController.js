@@ -59,3 +59,21 @@ export const getAnswers = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch answers", error: error.message });
     }
 };
+
+
+
+
+export const getAnswersByeCompany = async (req, res) => {
+
+    const {companyName} = req.params; // Retrieve optional query parameters
+
+    try {
+        // Fetch answers based on query criteria
+        const answers = await Answers.find({companyName: companyName});
+        
+        res.status(200).json(answers); // Respond with the fetched answers
+    } catch (error) {
+        // Handle any errors during the fetch process
+        res.status(500).json({ message: "Failed to fetch answers", error: error.message });
+    }
+};
