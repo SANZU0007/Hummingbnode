@@ -13,10 +13,18 @@ export const registerUser = async (req, res) => {
 
     try {
         const existingUser = await User.findOne({ email });
+
+        const existingUserName = await User.findOne({ name  });
         if (existingUser) {
             return res.status(400).json({ 
                 message: 'The email address is already associated with another account. Please use a different email.', 
-                type: 'error' 
+              
+            });
+        }
+        if (existingUserName) {
+            return res.status(400).json({ 
+                message: 'The User Name was Not Available . Please use a different Name.', 
+             
             });
         }
 
