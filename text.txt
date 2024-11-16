@@ -1,0 +1,11 @@
+// Backend Part 
+
+1. Add Employees - List of TL if employee is added
+
+2. Daily goals - return list of members in for that particular TL.
+
+3. Attendance - Return list of members for that particular Company. 
+
+4. Users - company based filtering. 
+
+5. filter company name in weekly/Daily/monthly in params for attendance purpose.

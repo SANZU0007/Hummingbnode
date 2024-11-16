@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTasks, getTaskById, updateTask, deleteTask, createTask, getAllTasksByTeam } from '../controllers/taskController.js';
+import { getAllTasks, getTaskById, updateTask, deleteTask, createTask, getAllTasksByTeam, getTasksByUser } from '../controllers/taskController.js';
 
 const router = express.Router();
 
@@ -18,8 +18,7 @@ router.delete('/deleteTask/:id', deleteTask);
 
 router.get('/all/:team', getAllTasksByTeam );
 
-
-
+router.get('/user/:userTaskId?', getTasksByUser );
 
 
 router.post('/create', createTask);

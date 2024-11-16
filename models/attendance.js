@@ -14,7 +14,7 @@ const attendanceSchema = new mongoose.Schema({
         default: null,
     },
     isCheckedIn: {
-        type: Boolean,
+        type: Boolean,  
         default: false,
     },
     userMood: {

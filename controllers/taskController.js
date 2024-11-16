@@ -15,7 +15,7 @@ export const getAllTasksByTeam = async (req, res) => {
     }
 
     // Fetch tasks where team matches the provided team parameter
-    const tasks = await Task.find({ team });
+    const tasks = await Task.find({ companyName : team });
 
     // Check if any tasks were found
     if (!tasks || tasks.length === 0) {
@@ -66,16 +66,25 @@ export const getAllTasks = async (req, res) => {
 
 
 // Get all tasks for a specific user
+
 export const getTasksByUser = async (req, res) => {
   try {
-    const { userId } = req.params; // Expecting userId to be passed in the URL
-    const tasks = await Task.find({ user: userId }); // Fetch tasks where user matches the userId
+    const {userTaskId} = req.params; // Retrieve optional query parameters
+
+    const tasks = await Task.find({user:userTaskId});
+
+    // If no tasks are found, respond accordingly
+    if (!tasks.length) {
+      return res.status(400).json({ message: "No tasks found for this user" });
+    }
+
     res.status(200).json(tasks);
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching tasks by user:", error); // Log for debugging
+    res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
-
 
 
 // Create a new task

@@ -4,7 +4,10 @@ import Feedback from '../models/Feedback.js';
 
 export const getAllFeedback = async (req, res) => {
     try {
-      const feedbackList = await Feedback.find();
+
+      const {companyName} = req.params; // Retrieve optional query parameters
+
+      const feedbackList = await Feedback.find({companyName: companyName});
       res.json(feedbackList);
     } catch (error) {
       res.status(400).json({ error: error.message });

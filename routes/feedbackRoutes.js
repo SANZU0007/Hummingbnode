@@ -5,9 +5,10 @@ const router = express.Router();
 
 router.post('/feedback', createFeedback);
 
-router.get('/feedback', getAllFeedback);
+router.get('/feedback/:companyName?', getAllFeedback);
 
 router.put('/feedback/:id', updateFeedback);
+
 router.delete('/feedback/:id', deleteFeedback);
 
 export default router;

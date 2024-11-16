@@ -143,7 +143,7 @@ export const loginUser = async (req, res) => {
 // Update User (PUT function)
 export const updateUser = async (req, res) => {
     const { id } = req.params; // Get user ID from URL parameters
-    const { name, email, password, role, team, image } = req.body; // Destructure updated fields from request body
+    const { name, email, password, role, team,} = req.body; // Destructure updated fields from request body
 
     try {
         // Find the user by ID
@@ -203,13 +203,14 @@ export const updateUser = async (req, res) => {
 
 
 
-// Get User Data by Team and Role
+
 export const getUserByTeamAndRole = async (req, res) => {
-    const { team } = req.params; // Get the team from URL parameters
+    const { team , companyName } = req.params; // Get the team from URL parameters
+   
 
     try {
         // Find users by team and role
-        const users = await User.find({ team, role: "Employee" });
+        const users = await User.find({ team, companyName });
 
         if (!users || users.length === 0) {
             return res.status(404).json({ 

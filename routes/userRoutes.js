@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 
-router.get('/team/:team', getUserByTeamAndRole);
+router.get('/team/:team/:companyName', getUserByTeamAndRole);
 
 router.put('/register/:id', updateUser);
 

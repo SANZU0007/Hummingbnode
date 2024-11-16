@@ -2,15 +2,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import session from 'express-session';
+import companyRoutes from './routes/companyRoutes.js';
 
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
-
 
 import employeeRoutes from "./routes/employees.js"
 import attendanceRoutes from './routes/attendanceRoutes.js';
@@ -19,10 +16,7 @@ import { createSurvey, getSurveYCompany, getSurveys } from './controllers/survey
 import answerRoutes from './routes/answerRoutes.js';
 
 import feedbackRoutes from './routes/feedbackRoutes.js';
-
-
 import messageRoutes from './routes/messageRoutes.js';
-
 import userRoutes from './routes/userRoutes.js';
 
 
@@ -79,6 +73,8 @@ app.get('/', (req, res) => {
 });
 
 
+
+app.use('/companies', companyRoutes);
 
 
 app.use('/tasks', taskRoutes);
