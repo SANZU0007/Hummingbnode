@@ -14,6 +14,7 @@ import {
 
 const router = express.Router();
 
+
 router.post('/checkin', checkIn);
 router.post('/checkout', checkOut);
 
