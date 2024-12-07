@@ -18,7 +18,7 @@ import answerRoutes from './routes/answerRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-
+import deepworkRoutes from './routes/deepWorkRoutes.js';
 
 const app = express();
 
@@ -73,6 +73,10 @@ app.get('/', (req, res) => {
 });
 
 
+
+
+
+app.use('/api/deepwork', deepworkRoutes);
 
 app.use('/companies', companyRoutes);
 
