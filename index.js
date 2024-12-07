@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
 
 
 
-app.use('/api/deepwork', deepworkRoutes);
+app.use('/deepwork', deepworkRoutes);
 
 app.use('/companies', companyRoutes);
 
